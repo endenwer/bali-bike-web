@@ -1,0 +1,12 @@
+;; shadow-cljs configuration
+{:source-paths ["src"]
+
+ :dependencies [[re-frame "0.10.6"]
+                [keechma/entitydb "0.1.5"]
+                [reagent "0.8.1"]]
+
+ :builds {:app {:target :browser
+                :output-dir "public/js"
+                :asset-path "/js"
+                :modules {:main {:entries [bali-bike-web.core]}}
+                :devtools {:http-root "public" :http-port 8020}}}}
