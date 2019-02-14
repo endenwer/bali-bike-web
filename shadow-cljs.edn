@@ -3,7 +3,9 @@
 
  :dependencies [[re-frame "0.10.6"]
                 [keechma/entitydb "0.1.5"]
-                [reagent "0.8.1"]]
+                [reagent "0.8.1"]
+                [camel-snake-kebab "0.4.0"]
+                [funcool/promesa "2.0.0-SNAPSHOT"]]
 
  :builds {:app {:target :browser
                 :output-dir "public/js"
