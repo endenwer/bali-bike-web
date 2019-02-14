@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "shadow-cljs watch app"
   },
-  "devDependencies": {
+ "devDependencies": {
     "shadow-cljs": "2.7.32"
   },
   "dependencies": {
