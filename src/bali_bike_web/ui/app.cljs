@@ -3,16 +3,14 @@
             [re-frame.core :as rf]
             [reagent.core :as r]))
 
-(defn main []
-  (r/create-class
-   {:component-did-mount #(rf/dispatch [:load-bikes])
-    :render (fn []
-              (let [columns [{:title "Model"
+(defn render-bikes-table []
+  (r/with-let [bikes (rf/subscribe [:bikes])]
+    (let [columns [{:title "Model"
                               :dataIndex "model"
                               :key "model"}
                              {:title "Manufacture Year"
-                              :dataIndex "year"
-                              :key "year"}
+                              :dataIndex "manufacture-year"
+                              :key "manufacture-year"}
                              {:title "Mileage"
                               :dataIndex "mileage"
                               :key "mileage"}
@@ -20,16 +18,21 @@
                               :dataIndex "rating"
                               :key "rating"}
                              {:title "Daily price"
-                              :dataIndex "daily"
-                              :key "daily"}
+                              :dataIndex "daily-price"
+                              :key "daily-daily"}
                              {:title "Monthly price"
-                              :dataIndex "monthly"
-                              :key "monthly"}
+                              :dataIndex "monthly-price"
+                              :key "monthly-price"}
                              {:title "Actions"
                               :dataIndex "actions"
-                              :key "actions"}]
-                    data [{:key "1"
-                           :model "asdf"}]]
-                [ant/table {:dataSource data
+                              :key "actions"}]]
+                [ant/table {:dataSource @bikes
+                            :rowKey "id"
                             :columns columns
-                            :pagination false}]))}))
+                            :pagination false}])))
+
+(defn main []
+  (r/create-class
+   {:component-did-mount #(rf/dispatch [:load-bikes])
+    :render (fn []
+              [render-bikes-table])}))
