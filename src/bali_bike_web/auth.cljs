@@ -5,13 +5,10 @@
             [promesa.async-cljs :refer-macros [async]]
             [promesa.core :as p :refer-macros [alet]]))
 
-(def user-instance (atom nil))
-
 (defn get-token []
-  (when-let [user @user-instance]
-    (->
-     (alet [token (p/await (.getIdToken user))] token)
-     (p/catch (fn [error] nil)))))
+  (->
+   (p/promise (.currentUser.getIdToken (.auth firebase)))
+   (p/catch (fn [error] (.log js/console error)))))
 
 (defn sign-in-with-google []
   (let [auth (.auth firebase)
@@ -27,7 +24,6 @@
 (defn listen-user-auth []
   (let [auth (.auth firebase)]
     (.onAuthStateChanged auth (fn [user]
-                                (reset! user-instance user)
                                 (let [user-data (if user (js->clj (.toJSON user)) nil)]
                                   (rf/dispatch [:auth-state-changed user-data]))))))
 
