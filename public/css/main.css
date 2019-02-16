@@ -28,3 +28,16 @@ body {
 .bikes-table {
     grid-area: bikes-table;
 }
+
+.model-row h2 {
+    margin: 0;
+}
+
+.bike-id {
+    color: silver;
+}
+
+.bike-model-name {
+    font-size: 18px;
+    font-weight: bold;
+}
