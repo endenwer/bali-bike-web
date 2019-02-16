@@ -27,6 +27,13 @@
      ^{:key photo} [:img {:src photo :style {:margin-right "10px"
                                              :max-width "200px"}}])])
 
+(defn render-bike-actions
+  [bike]
+  [:div
+   [:a {:on-click #(.log js/console "edit")} "Edit"]
+   [ant/divider {:type "vertical"}]
+   [:a {:on-click #(.log js/console "delete")} "Delete"]])
+
 (defn render-bikes-table []
   (r/with-let [bikes (rf/subscribe [:bikes])]
     (let [columns [{:title "Model"
@@ -57,7 +64,11 @@
                     :key "mileage"}
                    {:title "Actions"
                     :dataIndex "actions"
-                    :key "actions"}]]
+                    :key "actions"
+                    :width 120
+                    :render (fn [_ bike]
+                              (r/as-element
+                               [render-bike-actions (js->clj bike :keywordize-keys true)]))}]]
       [ant/table {:dataSource @bikes
                   :expandedRowRender (fn [bike]
                                        (r/as-element [render-bike-photos
