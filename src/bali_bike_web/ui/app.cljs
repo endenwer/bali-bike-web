@@ -27,12 +27,18 @@
                               :dataIndex "actions"
                               :key "actions"}]]
                 [ant/table {:dataSource @bikes
+                            :className "bikes-table"
                             :rowKey "id"
                             :columns columns
+                            :bordered true
                             :pagination false}])))
 
 (defn main []
   (r/create-class
    {:component-did-mount #(rf/dispatch [:load-bikes])
     :render (fn []
-              [render-bikes-table])}))
+              [:div.container
+               [:a.sign-out-link {:on-click #(rf/dispatch [:sign-out])} "SIGN OUT"]
+               [:h1.title "Bikes"]
+               [ant/button {:type "primary" :className "new-bike-button"} "Add bike"]
+               [render-bikes-table]])}))

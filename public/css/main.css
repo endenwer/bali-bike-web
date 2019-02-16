@@ -1,3 +1,30 @@
 body {
     color: green;
 }
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: 80px 40px auto;
+    grid-template-areas: ". sign-out-link"
+                         "title new-bike-button"
+                         "bikes-table bikes-table";
+    margin: 10px 20px;
+}
+
+.sign-out-link {
+    grid-area: sign-out-link;
+    justify-self: end;
+}
+
+.title {
+    grid-area: title;
+}
+
+.new-bike-button {
+    grid-area: new-bike-button;
+}
+
+.bikes-table {
+    grid-area: bikes-table;
+}

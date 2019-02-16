@@ -18,4 +18,4 @@
                 :devtools {:http-root "public"
                            :http-port 8020
                            :preloads [devtools.preload
-                                      day8.re-frame.trace.preload]}}}}
+                                      day8.re-frame-10x.preload]}}}}
