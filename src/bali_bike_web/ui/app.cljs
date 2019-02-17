@@ -1,6 +1,7 @@
 (ns bali-bike-web.ui.app
   (:require [bali-bike-web.ant :as ant]
             [bali-bike-web.constants :as constants]
+            [bali-bike-web.ui.form-modal :as form-modal]
             [re-frame.core :as rf]
             [reagent.core :as r]))
 
@@ -82,8 +83,14 @@
   (r/create-class
    {:component-did-mount #(rf/dispatch [:load-bikes])
     :render (fn []
-              [:div.container
-               [:a.sign-out-link {:on-click #(rf/dispatch [:sign-out])} "SIGN OUT"]
-               [:h1.title "Bikes"]
-               [ant/button {:type "primary" :className "new-bike-button"} "Add bike"]
-               [render-bikes-table]])}))
+              (r/with-let [show-form? (rf/subscribe [:show-form?])]
+                (if @show-form?
+                  [form-modal/main]
+                  [:div.container
+                   [:a.sign-out-link {:on-click #(rf/dispatch [:sign-out])} "SIGN OUT"]
+                   [:h1.title "Bikes"]
+                   [ant/button {:type "primary"
+                                :className "new-bike-button"
+                                :on-click #(rf/dispatch [:show-new-bike-form])}
+                    "Add bike"]
+                   [render-bikes-table]])))}))

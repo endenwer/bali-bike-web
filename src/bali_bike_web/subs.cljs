@@ -8,6 +8,11 @@
    (:current-user app-db)))
 
 (rf/reg-sub
+ :show-form?
+ (fn [app-db _]
+   (:show-form? app-db)))
+
+(rf/reg-sub
  :bikes
  (fn [app-db _]
    (edb/get-collection app-db :bikes :list)))

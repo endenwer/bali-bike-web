@@ -17,3 +17,13 @@
                             :rating :reviewsCount
                             :mileage :manufactureYear]]
                           :callback-event :on-bikes-loaded}})))
+
+(defn show-new-bike-form-event
+  [db [_ _]]
+  (-> db
+      (assoc :show-form? true)
+      (assoc :form-data (:new-bike db))))
+
+(defn close-form-modal-event
+  [db [_ _]]
+  (assoc db :show-form? false))

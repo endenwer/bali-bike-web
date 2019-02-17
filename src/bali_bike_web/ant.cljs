@@ -4,6 +4,7 @@
             ["antd/lib/table" :default Table]
             ["antd/lib/rate" :default Rate]
             ["antd/lib/divider" :default Divider]
+            ["antd/lib/icon" :default Icon]
             [reagent.core :as r]))
 
 (def menu (r/adapt-react-class Menu))
@@ -12,3 +13,4 @@
 (def table (r/adapt-react-class Table))
 (def rate (r/adapt-react-class Rate))
 (def divider (r/adapt-react-class Divider))
+(def icon (r/adapt-react-class Icon))
