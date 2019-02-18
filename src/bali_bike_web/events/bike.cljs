@@ -27,3 +27,7 @@
 (defn close-form-modal-event
   [db [_ _]]
   (assoc db :show-form? false))
+
+(defn change-formd-data-event
+  [db [_ id value]]
+  (assoc-in db [:form-data id] value))

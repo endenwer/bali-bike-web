@@ -7,10 +7,12 @@
             ["react-sortable-hoc" :refer [SortableContainer SortableElement arrayMove]]))
 
 (defn render-bike-model
-  [form-data]
+  [{:keys [model-id]}]
   [ant/form-item {:label "Bike model"
                   :className "model-input"}
    [ant/select {:placeholder "Select bike model"
+                :value model-id
+                :onChange #(rf/dispatch [:change-form-data :model-id %])
                 :showSearch true
                 :optionFilterProp "children"
                 :filterOption (fn [input option]
@@ -22,32 +24,40 @@
       ^{:key id} [ant/select-option {:value id} title])]])
 
 (defn render-bike-areas
-  [form-data]
+  [{:keys [area-ids]}]
   [ant/form-item {:label "Areas"
                   :className "areas-input"}
-   [ant/select {:placeholder "Select areas" :mode "multiple"}
+   [ant/select {:placeholder "Select areas"
+                :on-change #(rf/dispatch [:change-form-data :area-ids (js->clj %)])
+                :value (or area-ids [])
+                :mode "multiple"}
     (for [[id title] constants/areas]
       ^{:key id} [ant/select-option {:value id} title])]])
 
 (defn render-bike-price
-  [{:keys [title value class-name]}]
+  [{:keys [title price id]}]
   [ant/form-item {:label title
-                  :className class-name}
-   [ant/input-number {:size "200"
-                      :parser #(string/replace % #"Rp\s?|(,*)" "")
-                      :formatter #(str "Rp " (string/replace % #"\B(?=(\d{3})+(?!\d))" ","))}]])
+                  :className (str (name id) "-input")}
+   [ant/input-number {:value price
+                      :on-change #(rf/dispatch [:change-form-data id %])
+                      :parser #(string/replace (str %) #"Rp\s?|(,*)" "")
+                      :formatter #(str "Rp " (string/replace (str %) #"\B(?=(\d{3})+(?!\d))" ","))}]])
 
 (defn render-bike-manufacture-year
-  [form-data]
+  [{:keys [manufacture-year]}]
   [ant/form-item {:label "Manufacture year"
                   :className "manufacture-year-input"}
-   [ant/input-number]])
+   [ant/input-number {:value manufacture-year
+                      :on-change #(rf/dispatch [:change-form-data :manufacture-year %])}]])
 
 (defn render-bike-mileage
-  [form-data]
+  [{:keys [mileage]}]
   [ant/form-item {:label "Mileage"
                   :className "mileage-input"}
-   [ant/input-number]])
+   [ant/input-number {:value mileage
+                      :parser #(string/replace (str %) #"(,*)" "")
+                      :formatter #(string/replace (str %) #"\B(?=(\d{3})+(?!\d))" ",")
+                      :on-change #(rf/dispatch [:change-form-data :mileage %])}]])
 
 (defn render-bike-photo-item
   [{:keys [url]}]
@@ -60,7 +70,6 @@
 
 (defn render-photos-container
   [{:keys [photos]}]
-  (.log js/console photos)
   [ant/form-item {:label "Photos"
                   :className "photos-upload-container"}
    (doall
@@ -87,10 +96,10 @@
       [render-bike-model @form-data]
       [render-bike-areas @form-data]
       [render-bike-price {:title "Daily price"
-                          :class-name "daily-price-input"
+                          :id :daily-price
                           :price (:daily-price @form-data)}]
       [render-bike-price {:title "Monthly price"
-                          :class-name "monthly-price-input"
+                          :id :monthly-price
                           :price (:monthly-price @form-data)}]
       [render-bike-mileage @form-data]
       [render-bike-manufacture-year @form-data]

@@ -21,6 +21,7 @@
 (rf/reg-event-fx :load-bikes bike-events/load-bikes-event)
 (rf/reg-event-db :show-new-bike-form bike-events/show-new-bike-form-event)
 (rf/reg-event-db :close-form-modal bike-events/close-form-modal-event)
+(rf/reg-event-db :change-form-data bike-events/change-formd-data-event)
 (rf/reg-event-db :on-bikes-loaded
                  [interceptors/transform-event-to-kebab]
                  bike-events/on-bikes-loaded-event)
