@@ -5,14 +5,17 @@
   "scripts": {
     "dev": "shadow-cljs watch app"
   },
- "devDependencies": {
+  "devDependencies": {
     "shadow-cljs": "2.7.32"
   },
   "dependencies": {
     "antd": "^3.13.2",
     "create-react-class": "^15.6.3",
     "firebase": "^5.8.2",
+    "rc-form": "^2.4.2",
     "react": "^16.8.1",
-    "react-dom": "^16.8.1"
+    "react-dom": "^16.8.1",
+    "react-flip-move": "^3.0.3",
+    "react-highlight.js": "^1.0.7"
   }
 }

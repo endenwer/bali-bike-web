@@ -62,4 +62,46 @@
 
 .form-container {
     grid-area: form;
+    min-width: 66%;
+    max-width: 90%;
+    justify-self: center;
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, auto);
+    grid-template-areas: "model model model model"
+                         "areas areas areas areas"
+                         "daily-price monthly-price mileage manufacture-year";
+}
+
+.form-container .model-input {
+    grid-area: model;
+}
+
+.form-container .areas-input {
+    grid-area: areas;
+}
+
+.form-container .daily-price-input {
+    grid-area: daily-price;
+}
+
+.form-container .monthly-price-input {
+    grid-area: monthly-price;
+}
+
+.form-container .manufacture-year-input {
+    grid-area: manufacture-year;
+}
+
+.form-container .mileage-input {
+    grid-area: mileage;
+}
+
+.ant-input-number {
+    width: 100%;
+}
+
+.ant-form-item {
+    margin: 0;
 }

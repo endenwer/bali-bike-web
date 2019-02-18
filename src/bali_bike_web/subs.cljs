@@ -13,6 +13,11 @@
    (:show-form? app-db)))
 
 (rf/reg-sub
+ :form-data
+ (fn [app-db _]
+   (:form-data app-db)))
+
+(rf/reg-sub
  :bikes
  (fn [app-db _]
    (edb/get-collection app-db :bikes :list)))
