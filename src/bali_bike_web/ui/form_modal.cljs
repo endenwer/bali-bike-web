@@ -73,6 +73,11 @@
   (r/adapt-react-class
    (SortableContainer (r/reactify-component render-photos-container))))
 
+(defn render-buttons []
+  [:div.form-buttons
+   [ant/button "Cancel"]
+   [ant/button {:type "primary" :htmlType "submit"} "Save"]])
+
 (defn main []
   (r/with-let [form-data (rf/subscribe [:form-data])]
     [:div.modal
@@ -89,5 +94,5 @@
                           :price (:monthly-price @form-data)}]
       [render-bike-mileage @form-data]
       [render-bike-manufacture-year @form-data]
-      [render-bike-photos {:axis "xy"
-                           :photos (:photos @form-data)}]]]))
+      [render-bike-photos {:axis "xy" :photos (:photos @form-data)}]
+      [render-buttons]]]))
