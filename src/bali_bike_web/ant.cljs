@@ -9,6 +9,7 @@
             ["antd/lib/input" :default Input]
             ["antd/lib/select" :default Select]
             ["antd/lib/input-number" :default InputNumber]
+            ["antd/lib/upload" :default Upload]
             [reagent.core :as r]))
 
 (def menu (r/adapt-react-class Menu))
@@ -24,3 +25,5 @@
 (def select (r/adapt-react-class Select))
 (def select-option (r/adapt-react-class (.-Option Select)))
 (def input-number (r/adapt-react-class InputNumber))
+(def upload (r/adapt-react-class Upload))
+(def dragger (r/adapt-react-class (.-Dragger Upload)))

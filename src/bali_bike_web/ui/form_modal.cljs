@@ -3,7 +3,8 @@
             [bali-bike-web.constants :as constants]
             [reagent.core :as r]
             [re-frame.core :as rf]
-            [clojure.string :as string]))
+            [clojure.string :as string]
+            ["react-sortable-hoc" :refer [SortableContainer SortableElement arrayMove]]))
 
 (defn render-bike-model
   [form-data]
@@ -48,6 +49,30 @@
                   :className "mileage-input"}
    [ant/input-number]])
 
+(defn render-bike-photo-item
+  [{:keys [url]}]
+  [:div.photo-upload-preview
+   [:img {:src url}]])
+
+(def render-bike-photo
+  (r/adapt-react-class
+   (SortableElement (r/reactify-component render-bike-photo-item))))
+
+(defn render-photos-container
+  [{:keys [photos]}]
+  (.log js/console photos)
+  [ant/form-item {:label "Photos"
+                  :className "photos-upload-container"}
+   (doall
+    (map-indexed (fn [index url] ^{:key url} [render-bike-photo {:index index :url url}]) photos))
+   [ant/dragger
+    [ant/icon {:type "plus"}]
+    [:div {:class-name "ant-upload-text"} "Upload photos"]]])
+
+(def render-bike-photos
+  (r/adapt-react-class
+   (SortableContainer (r/reactify-component render-photos-container))))
+
 (defn main []
   (r/with-let [form-data (rf/subscribe [:form-data])]
     [:div.modal
@@ -63,4 +88,6 @@
                           :class-name "monthly-price-input"
                           :price (:monthly-price @form-data)}]
       [render-bike-mileage @form-data]
-      [render-bike-manufacture-year @form-data]]]))
+      [render-bike-manufacture-year @form-data]
+      [render-bike-photos {:axis "xy"
+                           :photos (:photos @form-data)}]]]))

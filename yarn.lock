@@ -13,6 +13,12 @@
   version "1.1.16"
   resolved "https://registry.yarnpkg.com/@ant-design/icons/-/icons-1.1.16.tgz#ac6426216934e3f4bc108f2f48f92ed66789235e"
 
+"@babel/runtime@^7.2.0":
+  version "7.3.1"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.3.1.tgz#574b03e8e8a9898eaf4a872a92ea20b7846f6f2a"
+  dependencies:
+    regenerator-runtime "^0.12.0"
+
 "@firebase/app-types@0.3.3":
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/@firebase/app-types/-/app-types-0.3.3.tgz#87659dd4cce8d1e341c717c61bd654998ac7142b"
@@ -791,6 +797,12 @@ inherits@2.0.1:
 ini@~1.3.0:
   version "1.3.5"
   resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.5.tgz#eee25f56db1c9ec6085e0c22778083f596abf927"
+
+invariant@^2.2.4:
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
+  dependencies:
+    loose-envify "^1.0.0"
 
 invert-kv@^1.0.0:
   version "1.0.0"
@@ -1682,6 +1694,14 @@ react-slick@~0.23.2:
     prettier "^1.14.3"
     resize-observer-polyfill "^1.5.0"
 
+react-sortable-hoc@^1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/react-sortable-hoc/-/react-sortable-hoc-1.6.1.tgz#2e9b551a7a1733201477571ad82608a7801309c6"
+  dependencies:
+    "@babel/runtime" "^7.2.0"
+    invariant "^2.2.4"
+    prop-types "^15.5.7"
+
 react@^16.8.1:
   version "16.8.1"
   resolved "https://registry.yarnpkg.com/react/-/react-16.8.1.tgz#ae11831f6cb2a05d58603a976afc8a558e852c4a"
@@ -1710,6 +1730,10 @@ readline-sync@^1.4.7:
 regenerator-runtime@^0.11.0:
   version "0.11.1"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.11.1.tgz#be05ad7f9bf7d22e056f9726cee5017fbf19e2e9"
+
+regenerator-runtime@^0.12.0:
+  version "0.12.1"
+  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.12.1.tgz#fa1a71544764c036f8c49b13a08b2594c9f8a0de"
 
 resize-observer-polyfill@^1.5.0:
   version "1.5.1"
