@@ -31,3 +31,7 @@
 (defn change-formd-data-event
   [db [_ id value]]
   (assoc-in db [:form-data id] value))
+
+(defn upload-photo-event
+  [{:keys [db uuid]} [_ file]]
+  {:db (edb/append-collection db :photos :list [{:id uuid :progress 0 :status "progress"}])})

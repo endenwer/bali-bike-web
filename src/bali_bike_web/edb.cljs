@@ -1,7 +1,8 @@
 (ns bali-bike-web.edb
   (:require [entitydb.core :as edb]))
 
-(def dbal (edb/make-dbal {:bikes {:id :id}}))
+(def dbal (edb/make-dbal {:bikes {:id :id}
+                          :photos {:id :id}}))
 
 (defn insert-item [& args] (apply (:insert-item dbal) args))
 (defn insert-named-item [& args] (apply (:insert-named-item dbal) args))

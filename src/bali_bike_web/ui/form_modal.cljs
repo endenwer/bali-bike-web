@@ -60,9 +60,11 @@
                       :on-change #(rf/dispatch [:change-form-data :mileage %])}]])
 
 (defn render-bike-photo-item
-  [{:keys [url]}]
+  [{:keys [url status progress]}]
   [:div.photo-upload-preview
-   [:img {:src url}]])
+   (if (= status "progress")
+     [ant/progress {:type "circle" :percent progress}]
+     [:img {:src url}])])
 
 (def render-bike-photo
   (r/adapt-react-class
@@ -73,8 +75,10 @@
   [ant/form-item {:label "Photos"
                   :className "photos-upload-container"}
    (doall
-    (map-indexed (fn [index url] ^{:key url} [render-bike-photo {:index index :url url}]) photos))
-   [ant/dragger
+    (map-indexed (fn [index photo]
+                   ^{:key (.-id photo)} [render-bike-photo (assoc (js->clj photo) :index index)])
+                 photos))
+   [ant/dragger {:multiple true :customRequest #(rf/dispatch [:upload-photo (.-file %)])}
     [ant/icon {:type "plus"}]
     [:div {:class-name "ant-upload-text"} "Upload photos"]]])
 
@@ -88,7 +92,8 @@
    [ant/button {:type "primary" :htmlType "submit"} "Save"]])
 
 (defn main []
-  (r/with-let [form-data (rf/subscribe [:form-data])]
+  (r/with-let [form-data (rf/subscribe [:form-data])
+               photos (rf/subscribe [:photos])]
     [:div.modal
      [:div.close-btn
       [ant/icon {:type :close :on-click #(rf/dispatch [:close-form-modal])}]]
@@ -103,5 +108,5 @@
                           :price (:monthly-price @form-data)}]
       [render-bike-mileage @form-data]
       [render-bike-manufacture-year @form-data]
-      [render-bike-photos {:axis "xy" :photos (:photos @form-data)}]
+      [render-bike-photos {:axis "xy" :photos @photos}]
       [render-buttons]]]))

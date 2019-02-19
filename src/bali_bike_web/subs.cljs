@@ -21,3 +21,8 @@
  :bikes
  (fn [app-db _]
    (edb/get-collection app-db :bikes :list)))
+
+(rf/reg-sub
+ :photos
+ (fn [app-db _]
+   (edb/get-collection app-db :photos :list)))

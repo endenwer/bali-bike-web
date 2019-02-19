@@ -4,7 +4,21 @@
             [bali-bike-web.api :as api]
             [bali-bike-web.interceptors :as interceptors]
             [bali-bike-web.auth :as auth]
-            [re-frame.core :as rf]))
+            [re-frame.core :as rf]
+            [goog.string.StringBuffer]))
+
+(rf/reg-cofx
+ :uuid
+ (fn [cofx _]
+   (assoc cofx
+          :uuid
+          (letfn [(f [] (.toString (rand-int 16) 16))
+                  (g [] (.toString  (bit-or 0x8 (bit-and 0x3 (rand-int 15))) 16))]
+            (.toString
+             (goog.string.StringBuffer.
+              (f) (f) (f) (f) (f) (f) (f) (f) "-" (f) (f) (f) (f)
+              "-4" (f) (f) (f) "-" (g) (f) (f) (f) "-"
+              (f) (f) (f) (f) (f) (f) (f) (f) (f) (f) (f) (f)))))))
 
 ; auth
 
@@ -19,6 +33,7 @@
 ; bikes
 
 (rf/reg-event-fx :load-bikes bike-events/load-bikes-event)
+(rf/reg-event-fx :upload-photo [(rf/inject-cofx :uuid)] bike-events/upload-photo-event)
 (rf/reg-event-db :show-new-bike-form bike-events/show-new-bike-form-event)
 (rf/reg-event-db :close-form-modal bike-events/close-form-modal-event)
 (rf/reg-event-db :change-form-data bike-events/change-formd-data-event)
