@@ -4,6 +4,7 @@
             [bali-bike-web.api :as api]
             [bali-bike-web.interceptors :as interceptors]
             [bali-bike-web.auth :as auth]
+            [bali-bike-web.storage :as storage]
             [re-frame.core :as rf]
             [goog.string.StringBuffer]))
 
@@ -34,6 +35,7 @@
 
 (rf/reg-event-fx :load-bikes bike-events/load-bikes-event)
 (rf/reg-event-fx :upload-photo [(rf/inject-cofx :uuid)] bike-events/upload-photo-event)
+(rf/reg-event-db :update-upload-progress bike-events/update-upload-progress-event)
 (rf/reg-event-db :show-new-bike-form bike-events/show-new-bike-form-event)
 (rf/reg-event-db :close-form-modal bike-events/close-form-modal-event)
 (rf/reg-event-db :change-form-data bike-events/change-formd-data-event)
@@ -43,3 +45,7 @@
 
 ; api
 (rf/reg-fx :api/send-graphql api/send-graphql)
+
+;storate
+(rf/reg-fx :storage/save-photo storage/save-photo)
+

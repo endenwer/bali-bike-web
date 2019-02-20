@@ -62,8 +62,9 @@
 (defn render-bike-photo-item
   [{:keys [url status progress]}]
   [:div.photo-upload-preview
-   (if (= status "progress")
-     [ant/progress {:type "circle" :percent progress}]
+   (case status
+     "progress" [ant/progress {:type "circle" :percent progress}]
+     "error" [ant/progress {:type "circle" :percent progress :status "exception"}]
      [:img {:src url}])])
 
 (def render-bike-photo

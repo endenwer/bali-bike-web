@@ -34,4 +34,9 @@
 
 (defn upload-photo-event
   [{:keys [db uuid]} [_ file]]
-  {:db (edb/append-collection db :photos :list [{:id uuid :progress 0 :status "progress"}])})
+  {:db (edb/append-collection db :photos :list [{:id uuid :progress 0 :status "progress"}])
+   :storage/save-photo {:id uuid :file file}})
+
+(defn update-upload-progress-event
+  [db [_ data]]
+  (edb/update-item-by-id db :photos (:id data) data))
