@@ -105,9 +105,6 @@
     width: 100%;
 }
 
-.ant-form-item {
-    margin: 0;
-}
 
 .photos-upload-container {
     grid-area: photo-upload;
@@ -132,6 +129,17 @@
     justify-items: center;
     align-items: center;
     display: grid;
+    background-color: white;
+}
+
+.photo-container {
+    width: 100%;
+    height: 100%;
+}
+
+.photo-delete-button {
+    position: absolute;
+    margin: 5px;
 }
 
 .photo-upload-preview img {

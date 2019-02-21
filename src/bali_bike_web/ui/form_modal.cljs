@@ -73,26 +73,34 @@
                       :on-change on-change}]])
 
 (defn render-bike-photo-item
-  [{:keys [url status progress]}]
+  [{:keys [url status progress removePhoto] :as params}]
   [:div.photo-upload-preview
    (case status
      "progress" [ant/progress {:type "circle" :percent progress}]
      "error" [ant/progress {:type "circle" :percent progress :status "exception"}]
-     [:img {:src url}])])
+     [:div.photo-container
+      [ant/button {:shape "circle"
+                   :on-click removePhoto
+                   :icon "delete"
+                   :class-name "photo-delete-button"}]
+      [:img {:src url}]])])
 
 (def render-bike-photo
   (r/adapt-react-class
    (SortableElement (r/reactify-component render-bike-photo-item))))
 
 (defn render-photos-container
-  [{:keys [photos addPhoto isValid?] :as params}]
+  [{:keys [photos addPhoto removePhoto isValid?]}]
   [ant/form-item {:label "Photos"
                   :validate-status (if isValid? "success" "error")
                   :help (when-not isValid? "Please upload at least one photo")
                   :className "photos-upload-container"}
    (doall
     (map-indexed (fn [index photo]
-                   ^{:key (.-id photo)} [render-bike-photo (assoc (js->clj photo) :index index)])
+                   ^{:key (.-id photo)} [render-bike-photo
+                                         (assoc (js->clj photo)
+                                                :remove-photo #(removePhoto (.-id photo))
+                                                :index index)])
                  photos))
    [ant/dragger {:multiple true :customRequest #(addPhoto (.-file %))}
     [ant/icon {:type "plus"}]
@@ -116,7 +124,11 @@
           add-photo (fn [file]
                       (swap! form-data assoc :photos-count (+ (:photos-count @(f/data form)) 1))
                       (when-not @(f/is-valid-path? form :photos-count) (f/validate! form true))
-                      (rf/dispatch [:upload-photo file]))]
+                      (rf/dispatch [:upload-photo file]))
+          remove-photo (fn [id]
+                         (swap! form-data assoc :photos-count (- (:photos-count @(f/data form)) 1))
+                         (when-not @(f/is-valid-path? form :photos-count) (f/validate! form true))
+                         (rf/dispatch [:remove-photo id]))]
       [ant/form {:layout "vertical"
                  :on-submit (fn [e]
                               (.preventDefault e)
@@ -146,6 +158,7 @@
                                       :on-change #(on-change :manufacture-year %)}]
        [render-bike-photos {:axis "xy"
                             :add-photo add-photo
+                            :remove-photo remove-photo
                             :is-valid? @(f/is-valid-path? form :photos-count)
                             :photos photos}]
        [render-buttons]])))

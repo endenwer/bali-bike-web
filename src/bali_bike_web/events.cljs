@@ -35,6 +35,7 @@
 
 (rf/reg-event-fx :load-bikes bike-events/load-bikes-event)
 (rf/reg-event-fx :upload-photo [(rf/inject-cofx :uuid)] bike-events/upload-photo-event)
+(rf/reg-event-db :remove-photo bike-events/remove-photo-event)
 (rf/reg-event-db :update-upload-progress bike-events/update-upload-progress-event)
 (rf/reg-event-db :show-new-bike-form bike-events/show-new-bike-form-event)
 (rf/reg-event-db :close-form-modal bike-events/close-form-modal-event)

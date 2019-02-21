@@ -40,3 +40,7 @@
 (defn update-upload-progress-event
   [db [_ data]]
   (edb/update-item-by-id db :photos (:id data) data))
+
+(defn remove-photo-event
+  [db [_ id]]
+  (edb/remove-item db :photos id))
