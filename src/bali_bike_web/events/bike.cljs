@@ -1,6 +1,14 @@
 (ns bali-bike-web.events.bike
   (:require [bali-bike-web.edb :as edb]))
 
+;; helpers
+
+(defn move-element
+  [v old-index new-index]
+  (assoc (assoc v new-index (v old-index)) old-index (v new-index)))
+
+;; events
+
 (defn on-bikes-loaded-event
   [db [_ {:keys [data]}]]
   (edb/append-collection db :bikes :list (:own-bikes data) {:loading? false}))
@@ -44,3 +52,8 @@
 (defn remove-photo-event
   [db [_ id]]
   (edb/remove-item db :photos id))
+
+(defn move-photo-event
+  [db [_ old-index new-index]]
+  (let [photos (edb/get-collection db :photos :list)]
+    (edb/insert-collection db :photos :list (move-element photos old-index new-index))))

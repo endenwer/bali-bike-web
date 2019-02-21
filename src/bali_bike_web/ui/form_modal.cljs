@@ -6,7 +6,7 @@
             [clojure.string :as string]
             [bali-bike-web.form :as form]
             [forms.core :as f]
-            ["react-sortable-hoc" :refer [SortableContainer SortableElement arrayMove]]))
+            ["react-sortable-hoc" :refer [SortableContainer SortableElement]]))
 
 (defn render-bike-model
   [{:keys [model-id on-change is-valid?]}]
@@ -159,6 +159,7 @@
        [render-bike-photos {:axis "xy"
                             :add-photo add-photo
                             :remove-photo remove-photo
+                            :on-sort-end #(rf/dispatch [:move-photo (.-oldIndex %) (.-newIndex %)])
                             :is-valid? @(f/is-valid-path? form :photos-count)
                             :photos photos}]
        [render-buttons]])))
