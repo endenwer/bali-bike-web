@@ -11,6 +11,7 @@
 .sign-out-link {
     grid-area: sign-out-link;
     justify-self: end;
+    align-self: start;
 }
 
 .title {
@@ -40,8 +41,8 @@
 
 .modal {
     display: grid;
-    grid-template-rows: auto 1fr;
-    grid-template-areas: "close-btn" "form";
+    grid-template-rows: 1fr;
+    grid-template-areas: "form";
 }
 
 .modal .close-btn {
@@ -61,6 +62,7 @@
 }
 
 .form-container {
+    margin-top: 50px;
     margin-bottom: 10px;
     grid-area: form;
     min-width: 66%;

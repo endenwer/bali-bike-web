@@ -112,7 +112,7 @@
 
 (defn render-buttons []
   [:div.form-buttons
-   [ant/button "Cancel"]
+   [ant/button {:on-click #(rf/dispatch [:close-form-modal])} "Cancel"]
    [ant/button {:type "primary" :htmlType "submit"} "Save"]])
 
 (defn render-form
@@ -167,7 +167,4 @@
   (r/with-let [form-data-sub (rf/subscribe [:form-data])
                photos (rf/subscribe [:photos])
                form (form/create (assoc @form-data-sub :photos-count (count @photos)))]
-    [:div.modal
-     [:div.close-btn
-      [ant/icon {:type :close :on-click #(rf/dispatch [:close-form-modal])}]]
-     [render-form form @photos]]))
+    [:div.modal [render-form form @photos]]))
