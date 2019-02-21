@@ -85,14 +85,16 @@
    (SortableElement (r/reactify-component render-bike-photo-item))))
 
 (defn render-photos-container
-  [{:keys [photos]}]
+  [{:keys [photos addPhoto isValid?] :as params}]
   [ant/form-item {:label "Photos"
+                  :validate-status (if isValid? "success" "error")
+                  :help (when-not isValid? "Please upload at least one photo")
                   :className "photos-upload-container"}
    (doall
     (map-indexed (fn [index photo]
                    ^{:key (.-id photo)} [render-bike-photo (assoc (js->clj photo) :index index)])
                  photos))
-   [ant/dragger {:multiple true :customRequest #(rf/dispatch [:upload-photo (.-file %)])}
+   [ant/dragger {:multiple true :customRequest #(addPhoto (.-file %))}
     [ant/icon {:type "plus"}]
     [:div {:class-name "ant-upload-text"} "Upload photos"]]])
 
@@ -110,7 +112,11 @@
   (r/with-let [form-data (f/data form)]
     (let [on-change (fn [path value]
                       (swap! form-data assoc path value)
-                      (when-not @(f/is-valid-path? form path) (f/validate! form true)))]
+                      (when-not @(f/is-valid-path? form path) (f/validate! form true)))
+          add-photo (fn [file]
+                      (swap! form-data assoc :photos-count (+ (:photos-count @(f/data form)) 1))
+                      (when-not @(f/is-valid-path? form :photos-count) (f/validate! form true))
+                      (rf/dispatch [:upload-photo file]))]
       [ant/form {:layout "vertical"
                  :on-submit (fn [e]
                               (.preventDefault e)
@@ -138,13 +144,16 @@
        [render-bike-manufacture-year {:manufacture-year (:manufacture-year @form-data)
                                       :is-valid? @(f/is-valid-path? form :manufacture-year)
                                       :on-change #(on-change :manufacture-year %)}]
-       [render-bike-photos {:axis "xy" :photos photos}]
+       [render-bike-photos {:axis "xy"
+                            :add-photo add-photo
+                            :is-valid? @(f/is-valid-path? form :photos-count)
+                            :photos photos}]
        [render-buttons]])))
 
 (defn main []
   (r/with-let [form-data-sub (rf/subscribe [:form-data])
-               form (form/create @form-data-sub)
-               photos (rf/subscribe [:photos])]
+               photos (rf/subscribe [:photos])
+               form (form/create (assoc @form-data-sub :photos-count (count @photos)))]
     [:div.modal
      [:div.close-btn
       [ant/icon {:type :close :on-click #(rf/dispatch [:close-form-modal])}]]
