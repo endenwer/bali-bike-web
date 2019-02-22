@@ -7,6 +7,12 @@
 
 (def http-url "http://localhost:4000")
 
+(defn- vector-to-string
+  [v]
+  (str "["
+       (clojure.string/join "," (mapv #(if (string? %) (str "\"" % "\"") %) v))
+       "]"))
+
 (defn parse-query [q]
   (cond
     (keyword? q)
@@ -20,9 +26,16 @@
           \,
           (map (fn [[k v]]
                  (let [v (if (keyword? v) (name v) v)]
-                   (if (string? v)
+                   (cond
+                     (string? v)
                      (str (name k) ":\"" (str v) \")
-                     (str (name k) ":" (str v)))))
+
+                     (vector? v)
+                     (str (name k) ":" (vector-to-string v))
+
+                     :else
+                     (str (name k) ":" (str v)))
+                   ))
                q))
          \))
     (vector? q)

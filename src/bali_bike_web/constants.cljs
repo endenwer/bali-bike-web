@@ -5,6 +5,6 @@
    2 "Honda Scoopy"})
 
 (def areas
-  {:canggu "Canggu"
-   :kuta "Kuta"
-   :kerobokan "Kerobokan"})
+  {1 "Canggu"
+   2 "Kuta"
+   3 "Kerobokan"})

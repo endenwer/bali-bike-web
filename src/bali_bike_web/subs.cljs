@@ -13,6 +13,11 @@
    (:show-form? app-db)))
 
 (rf/reg-sub
+ :bike-submitting?
+ (fn [app-db _]
+   (:bike-submitting? app-db)))
+
+(rf/reg-sub
  :form-data
  (fn [app-db _]
    (:form-data app-db)))

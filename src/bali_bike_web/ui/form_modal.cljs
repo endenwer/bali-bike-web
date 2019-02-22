@@ -111,9 +111,12 @@
    (SortableContainer (r/reactify-component render-photos-container))))
 
 (defn render-buttons []
-  [:div.form-buttons
-   [ant/button {:on-click #(rf/dispatch [:close-form-modal])} "Cancel"]
-   [ant/button {:type "primary" :htmlType "submit"} "Save"]])
+  (r/with-let [bike-submitting? (rf/subscribe [:bike-submitting?])]
+    [:div.form-buttons
+     [ant/button {:on-click #(rf/dispatch [:close-form-modal])} "Cancel"]
+     [ant/button {:type "primary"
+                  :loading @bike-submitting?
+                  :htmlType "submit"} "Save"]]))
 
 (defn render-form
   [form photos]
@@ -132,14 +135,16 @@
       [ant/form {:layout "vertical"
                  :on-submit (fn [e]
                               (.preventDefault e)
-                              (f/validate! form))
+                              (f/validate! form)
+                              (when @(f/is-valid? form)
+                                (rf/dispatch [:create-bike @form-data])))
                  :className "form-container"}
        [render-bike-model {:model-id (:model-id @form-data)
                            :is-valid? @(f/is-valid-path? form :model-id)
                            :on-change #(on-change :model-id %)}]
        [render-bike-areas {:area-ids (:area-ids @form-data)
                            :is-valid? @(f/is-valid-path? form :area-ids)
-                           :on-change #(on-change :area-ids %)}]
+                           :on-change #(on-change :area-ids (js->clj %))}]
        [render-bike-price {:title "Daily price"
                            :id :daily-price
                            :is-valid? @(f/is-valid-path? form :daily-price)

@@ -7,6 +7,13 @@
   [v old-index new-index]
   (assoc (assoc v new-index (v old-index)) old-index (v new-index)))
 
+(def bike-query
+  [:id :modelId :photos
+   :dailyPrice :monthlyPrice
+   :rating :reviewsCount
+   :mileage :manufactureYear
+   :areaIds])
+
 ;; events
 
 (defn on-bikes-loaded-event
@@ -19,11 +26,7 @@
     (when (empty? bikes)
       {:db (edb/insert-meta db :bikes :list {:loading? true})
        :api/send-graphql {:query
-                          [:ownBikes
-                           [:id :modelId :photos
-                            :dailyPrice :monthlyPrice
-                            :rating :reviewsCount
-                            :mileage :manufactureYear]]
+                          [:ownBikes bike-query]
                           :callback-event :on-bikes-loaded}})))
 
 (defn show-new-bike-form-event
@@ -57,3 +60,27 @@
   [db [_ old-index new-index]]
   (let [photos (edb/get-collection db :photos :list)]
     (edb/insert-collection db :photos :list (move-element photos old-index new-index))))
+
+(defn on-bike-created-event
+  [db [_ {:keys [data]}]]
+  (-> db
+      (edb/prepend-collection :bikes :list [(:create-bike data)])
+      (edb/remove-collection :photos :list)
+      (assoc :bike-submitting? false)
+      (assoc :show-form? false)))
+
+(defn create-bike-event
+  [{:keys [db]} [_ {:keys [model-id manufacture-year mileage daily-price monthly-price area-ids]}]]
+  (let [photos (edb/get-collection db :photos :list)
+        photo-urls (into [] (filter some? (map :url photos)))]
+    {:db (assoc db :bike-submitting? true)
+     :api/send-graphql {:mutation [:createBike
+                                   {:modelId model-id
+                                    :photos photo-urls
+                                    :manufactureYear manufacture-year
+                                    :mileage mileage
+                                    :dailyPrice daily-price
+                                    :monthlyPrice monthly-price
+                                    :areaIds area-ids}
+                                   bike-query]
+                        :callback-event :on-bike-created}}))

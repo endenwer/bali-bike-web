@@ -35,12 +35,16 @@
 
 (rf/reg-event-fx :load-bikes bike-events/load-bikes-event)
 (rf/reg-event-fx :upload-photo [(rf/inject-cofx :uuid)] bike-events/upload-photo-event)
+(rf/reg-event-fx :create-bike bike-events/create-bike-event)
 (rf/reg-event-db :move-photo bike-events/move-photo-event)
 (rf/reg-event-db :remove-photo bike-events/remove-photo-event)
 (rf/reg-event-db :update-upload-progress bike-events/update-upload-progress-event)
 (rf/reg-event-db :show-new-bike-form bike-events/show-new-bike-form-event)
 (rf/reg-event-db :close-form-modal bike-events/close-form-modal-event)
 (rf/reg-event-db :change-form-data bike-events/change-formd-data-event)
+(rf/reg-event-db :on-bike-created
+                 [interceptors/transform-event-to-kebab]
+                 bike-events/on-bike-created-event)
 (rf/reg-event-db :on-bikes-loaded
                  [interceptors/transform-event-to-kebab]
                  bike-events/on-bikes-loaded-event)
