@@ -31,7 +31,7 @@
 (defn render-bike-actions
   [bike]
   [:div
-   [:a {:on-click #(.log js/console "edit")} "Edit"]
+   [:a {:on-click #(rf/dispatch [:edit-bike (:id bike)])} "Edit"]
    [ant/divider {:type "vertical"}]
    [:a {:on-click #(.log js/console "delete")} "Delete"]])
 

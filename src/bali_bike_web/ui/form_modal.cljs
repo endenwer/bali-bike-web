@@ -9,12 +9,13 @@
             ["react-sortable-hoc" :refer [SortableContainer SortableElement]]))
 
 (defn render-bike-model
-  [{:keys [model-id on-change is-valid?]}]
+  [{:keys [model-id on-change is-valid? disabled?]}]
   [ant/form-item {:label "Bike model"
                   :validate-status (if is-valid? "success" "error")
                   :help (when-not is-valid? "Please select bike model")
                   :className "model-input"}
    [ant/select {:placeholder "Select bike model"
+                :disabled disabled?
                 :value model-id
                 :onChange on-change
                 :showSearch true
@@ -53,12 +54,13 @@
                                        (string/replace (str %) #"\B(?=(\d{3})+(?!\d))" ","))}]])
 
 (defn render-bike-manufacture-year
-  [{:keys [manufacture-year is-valid? on-change]}]
+  [{:keys [manufacture-year is-valid? disabled? on-change]}]
   [ant/form-item {:label "Manufacture year"
                   :validate-status (if is-valid? "success" "error")
                   :help (when-not is-valid? "Please input manufacture year")
                   :className "manufacture-year-input"}
    [ant/input-number {:value manufacture-year
+                      :disabled disabled?
                       :on-change on-change}]])
 
 (defn render-bike-mileage
@@ -137,10 +139,11 @@
                               (.preventDefault e)
                               (f/validate! form)
                               (when @(f/is-valid? form)
-                                (rf/dispatch [:create-bike @form-data])))
+                                (rf/dispatch [:save-bike @form-data])))
                  :className "form-container"}
        [render-bike-model {:model-id (:model-id @form-data)
                            :is-valid? @(f/is-valid-path? form :model-id)
+                           :disabled? (not (nil? (:id @form-data)))
                            :on-change #(on-change :model-id %)}]
        [render-bike-areas {:area-ids (:area-ids @form-data)
                            :is-valid? @(f/is-valid-path? form :area-ids)
@@ -159,6 +162,7 @@
                              :is-valid? @(f/is-valid-path? form :mileage)
                              :on-change #(on-change :mileage %)}]
        [render-bike-manufacture-year {:manufacture-year (:manufacture-year @form-data)
+                                      :disabled? (not (nil? (:id @form-data)))
                                       :is-valid? @(f/is-valid-path? form :manufacture-year)
                                       :on-change #(on-change :manufacture-year %)}]
        [render-bike-photos {:axis "xy"

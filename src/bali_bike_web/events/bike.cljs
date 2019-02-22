@@ -61,26 +61,41 @@
   (let [photos (edb/get-collection db :photos :list)]
     (edb/insert-collection db :photos :list (move-element photos old-index new-index))))
 
-(defn on-bike-created-event
+(defn on-bike-saved-event
   [db [_ {:keys [data]}]]
-  (-> db
-      (edb/prepend-collection :bikes :list [(:create-bike data)])
-      (edb/remove-collection :photos :list)
-      (assoc :bike-submitting? false)
-      (assoc :show-form? false)))
+  (let [bike-data (or (:create-bike data) (:update-bike data))
+        bike (edb/get-item-by-id db :bikes (:id bike-data))
+        db-with-bikes (if bike
+                        (edb/update-item-by-id db :bikes (:id bike) bike)
+                        (edb/prepend-collection db :bikes :list [bike-data]))]
+    (-> db-with-bikes
+        (edb/remove-collection :photos :list)
+        (assoc :bike-submitting? false)
+        (assoc :show-form? false))))
 
-(defn create-bike-event
-  [{:keys [db]} [_ {:keys [model-id manufacture-year mileage daily-price monthly-price area-ids]}]]
+(defn save-bike-event
+  [{:keys [db]}
+   [_ {:keys [id model-id manufacture-year mileage daily-price monthly-price area-ids]}]]
   (let [photos (edb/get-collection db :photos :list)
-        photo-urls (into [] (filter some? (map :url photos)))]
+        photo-urls (into [] (filter some? (map :url photos)))
+        shared-params {:photos photo-urls
+                       :mileage mileage
+                       :dailyPrice daily-price
+                       :monthlyPrice monthly-price
+                       :areaIds area-ids}
+        create-params (merge shared-params {:modelId model-id :manufactureYear manufacture-year})
+        create-mutation [:createBike create-params bike-query]
+        update-params (merge shared-params {:id id})
+        update-mutation [:updateBike update-params bike-query]]
     {:db (assoc db :bike-submitting? true)
-     :api/send-graphql {:mutation [:createBike
-                                   {:modelId model-id
-                                    :photos photo-urls
-                                    :manufactureYear manufacture-year
-                                    :mileage mileage
-                                    :dailyPrice daily-price
-                                    :monthlyPrice monthly-price
-                                    :areaIds area-ids}
-                                   bike-query]
-                        :callback-event :on-bike-created}}))
+     :api/send-graphql {:mutation (if id update-mutation create-mutation)
+                        :callback-event :on-bike-saved}}))
+
+(defn edit-bike-event
+  [db [_ id]]
+  (let [bike (edb/get-item-by-id db :bikes id)
+        photos (map-indexed #(identity {:id %1 :url %2 :status "success"}) (:photos bike))]
+    (-> db
+        (assoc :form-data bike)
+        (assoc :show-form? true)
+        (edb/insert-collection :photos :list photos))))
