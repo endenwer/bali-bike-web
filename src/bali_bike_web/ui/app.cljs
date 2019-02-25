@@ -33,7 +33,12 @@
   [:div
    [:a {:on-click #(rf/dispatch [:edit-bike (:id bike)])} "Edit"]
    [ant/divider {:type "vertical"}]
-   [:a {:on-click #(.log js/console "delete")} "Delete"]])
+   [ant/popconfirm {:title "Delete bike?"
+                    :ok-text "Yes"
+                    :cancel-text "No"
+                    :placement "left"
+                    :on-confirm #(rf/dispatch [:delete-bike (:id bike)])}
+    [:a "Delete"]]])
 
 (defn render-bikes-table []
   (r/with-let [bikes (rf/subscribe [:bikes])]

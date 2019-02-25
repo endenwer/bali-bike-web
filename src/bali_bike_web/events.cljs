@@ -36,6 +36,7 @@
 (rf/reg-event-fx :load-bikes bike-events/load-bikes-event)
 (rf/reg-event-fx :upload-photo [(rf/inject-cofx :uuid)] bike-events/upload-photo-event)
 (rf/reg-event-fx :save-bike bike-events/save-bike-event)
+(rf/reg-event-fx :delete-bike bike-events/delete-bike-event)
 (rf/reg-event-db :edit-bike bike-events/edit-bike-event)
 (rf/reg-event-db :move-photo bike-events/move-photo-event)
 (rf/reg-event-db :remove-photo bike-events/remove-photo-event)

@@ -99,3 +99,10 @@
         (assoc :form-data bike)
         (assoc :show-form? true)
         (edb/insert-collection :photos :list photos))))
+
+(defn delete-bike-event
+  [{:keys [db]} [_ id]]
+  (let [bikes (edb/get-collection db :bikes :list)
+        filtered-bikes (filter #(not= (:id %)id) bikes)]
+    {:db (edb/insert-collection db :bikes :list filtered-bikes)
+     :api/send-graphql {:mutation [:deleteBike {:id id} [:id]]}}))

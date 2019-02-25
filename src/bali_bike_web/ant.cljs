@@ -12,6 +12,7 @@
             ["antd/lib/upload" :default Upload]
             ["antd/lib/progress" :default Progress]
             ["antd/lib/tag" :default Tag]
+            ["antd/lib/popconfirm" :default Popconfirm]
             [reagent.core :as r]))
 
 (def menu (r/adapt-react-class Menu))
@@ -31,3 +32,4 @@
 (def dragger (r/adapt-react-class (.-Dragger Upload)))
 (def progress (r/adapt-react-class Progress))
 (def tag (r/adapt-react-class Tag))
+(def popconfirm (r/adapt-react-class Popconfirm))
