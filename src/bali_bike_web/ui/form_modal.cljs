@@ -104,7 +104,9 @@
                                                 :remove-photo #(removePhoto (.-id photo))
                                                 :index index)])
                  photos))
-   [ant/dragger {:multiple true :customRequest #(addPhoto (.-file %))}
+   [ant/dragger {:multiple true
+                 :showUploadList false
+                 :customRequest #(addPhoto (.-file %))}
     [ant/icon {:type "plus"}]
     [:div {:class-name "ant-upload-text"} "Upload photos"]]])
 
