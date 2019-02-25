@@ -32,6 +32,7 @@
 (defn show-new-bike-form-event
   [db [_ _]]
   (-> db
+      (edb/remove-collection :photos :list)
       (assoc :show-form? true)
       (assoc :form-data (:new-bike db))))
 
