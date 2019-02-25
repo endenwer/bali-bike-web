@@ -28,6 +28,11 @@
    (edb/get-collection app-db :bikes :list)))
 
 (rf/reg-sub
+ :bikes-meta
+ (fn [app-db _]
+   (edb/get-collection-meta app-db :bikes :list)))
+
+(rf/reg-sub
  :photos
  (fn [app-db _]
    (edb/get-collection app-db :photos :list)))

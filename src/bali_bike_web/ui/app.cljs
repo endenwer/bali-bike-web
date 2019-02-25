@@ -41,7 +41,8 @@
     [:a "Delete"]]])
 
 (defn render-bikes-table []
-  (r/with-let [bikes (rf/subscribe [:bikes])]
+  (r/with-let [bikes (rf/subscribe [:bikes])
+               bikes-meta (rf/subscribe [:bikes-meta])]
     (let [columns [{:title "Model"
                     :dataIndex "model"
                     :key "model"
@@ -80,6 +81,7 @@
                               (r/as-element
                                [render-bike-actions (js->clj bike :keywordize-keys true)]))}]]
       [ant/table {:dataSource @bikes
+                  :loading (or (:loading? @bikes-meta) false)
                   :expandedRowRender (fn [bike]
                                        (r/as-element [render-bike-photos
                                                       (js->clj bike :keywordize-keys true)]))
