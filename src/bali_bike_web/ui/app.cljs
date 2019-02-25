@@ -43,12 +43,15 @@
                     :width 250
                     :render (fn [_ bike]
                               (r/as-element [render-model (js->clj bike :keywordize-keys true)]))}
-                   {:title "Rating"
-                    :dataIndex "rating"
-                    :key "rating"
+                   {:title "Areas"
+                    :dataIndex "areas"
+                    :key "areas"
                     :width 220
                     :render (fn [_ bike]
-                              (r/as-element [render-rating (js->clj bike :keywordize-keys true)]))}
+                              (r/as-element [:div.area-tags
+                                             (for [area-id (get (js->clj bike) "area-ids")]
+                                               ^{:key area-id}
+                                               [ant/tag (get constants/areas area-id)])]))}
                    {:title "Daily price"
                     :dataIndex "daily-price"
                     :key "daily-daily"
@@ -57,12 +60,13 @@
                     :dataIndex "monthly-price"
                     :key "monthly-price"
                     :render #(r/as-element [render-price %])}
+                   {:title "Mileage"
+                    :dataIndex "mileage"
+                    :key "mileage"
+                    :render #(r/as-element [:span (.toLocaleString %)])}
                    {:title "Manufacture Year"
                     :dataIndex "manufacture-year"
                     :key "manufacture-year"}
-                   {:title "Mileage"
-                    :dataIndex "mileage"
-                    :key "mileage"}
                    {:title "Actions"
                     :dataIndex "actions"
                     :key "actions"

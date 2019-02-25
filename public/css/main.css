@@ -157,3 +157,7 @@
     grid-template-columns: 1fr 1fr;
     grid-gap: 10px;
 }
+
+.area-tags .ant-tag {
+    margin-bottom: 8px;
+}

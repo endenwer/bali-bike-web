@@ -11,6 +11,7 @@
             ["antd/lib/input-number" :default InputNumber]
             ["antd/lib/upload" :default Upload]
             ["antd/lib/progress" :default Progress]
+            ["antd/lib/tag" :default Tag]
             [reagent.core :as r]))
 
 (def menu (r/adapt-react-class Menu))
@@ -29,3 +30,4 @@
 (def upload (r/adapt-react-class Upload))
 (def dragger (r/adapt-react-class (.-Dragger Upload)))
 (def progress (r/adapt-react-class Progress))
+(def tag (r/adapt-react-class Tag))
