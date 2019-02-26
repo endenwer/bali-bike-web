@@ -1,9 +1,14 @@
 (ns bali-bike-web.api
   (:require [bali-bike-web.http :as http]
-            [bali-bike-web.auth :as auth]
             [re-frame.core :as rf]
             [promesa.core :as p :refer-macros [alet]]
-            [clojure.string]))
+            [clojure.string]
+            ["firebase/app" :as firebase]))
+
+(defn get-token []
+  (->
+   (p/promise (.currentUser.getIdToken (.auth firebase)))
+   (p/catch (fn [error] (.log js/console error)))))
 
 (def http-url "http://localhost:4000")
 
@@ -50,7 +55,7 @@
 
 (defn- post
   [params]
-  (alet [token (p/await (auth/get-token))
+  (alet [token (p/await (get-token))
          headers {"Authorization" token}
          response (p/await (http/POST http-url {:headers headers
                                                 :with-credentials? false
