@@ -13,6 +13,7 @@
             ["antd/lib/progress" :default Progress]
             ["antd/lib/tag" :default Tag]
             ["antd/lib/popconfirm" :default Popconfirm]
+            ["antd/lib/spin" :default Spin]
             [reagent.core :as r]))
 
 (def menu (r/adapt-react-class Menu))
@@ -33,3 +34,4 @@
 (def progress (r/adapt-react-class Progress))
 (def tag (r/adapt-react-class Tag))
 (def popconfirm (r/adapt-react-class Popconfirm))
+(def spin (r/adapt-react-class Spin))

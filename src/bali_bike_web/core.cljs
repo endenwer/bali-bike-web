@@ -9,8 +9,15 @@
             [bali-bike-web.events]))
 
 (defn app-root []
-  (r/with-let [current-user (rf/subscribe [:current-user])]
-    (if @current-user [app/main] [login-page/main])))
+  (r/with-let [current-user (rf/subscribe [:current-user])
+               user-loaded? (rf/subscribe [:user-loaded?])]
+    (if @user-loaded?
+      (if @current-user [app/main] [login-page/main])
+      [:div {:style {:display "flex"
+                     :justify-content "center"
+                     :align-items "center"
+                     :height "100%"}}
+       [ant/spin {:size "large"}]])))
 
 ;; start is called by init and after code reloading finishes
 (defn ^:dev/after-load start []
