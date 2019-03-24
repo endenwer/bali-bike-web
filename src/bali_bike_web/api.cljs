@@ -10,7 +10,7 @@
    (p/promise (.currentUser.getIdToken (.auth firebase)))
    (p/catch (fn [error] (.log js/console error)))))
 
-(def http-url "http://localhost:4000")
+(goog-define api-url "http://localhost:4000")
 
 (defn- vector-to-string
   [v]
@@ -57,9 +57,9 @@
   [params]
   (alet [token (p/await (get-token))
          headers {"Authorization" token}
-         response (p/await (http/POST http-url {:headers headers
-                                                :with-credentials? false
-                                                :json-params params}))]
+         response (p/await (http/POST api-url {:headers headers
+                                               :with-credentials? false
+                                               :json-params params}))]
         response))
 
 (defn send-graphql

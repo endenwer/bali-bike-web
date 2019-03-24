@@ -15,7 +15,9 @@
                 :output-dir "public/js"
                 :asset-path "/js"
                 :modules {:main {:entries [bali-bike-web.core]}}
-                :compiler-options {:closure-defines {re-frame.trace.trace-enabled? true}}
+                :dev {:closure-defines {bali-bike-web.api/api-url "http://localhost:4000"
+                                        re-frame.trace.trace-enabled? true}}
+                :release {:closure-defines {bali-bike-web.api/api-url "https://api.balibike.app"}}
                 :devtools {:http-root "public"
                            :http-port 8020
                            :preloads [devtools.preload
