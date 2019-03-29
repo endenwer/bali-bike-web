@@ -5,6 +5,10 @@
             [re-frame.core :as rf]
             [reagent.core :as r]))
 
+(def status-colors
+  {"MODERATION" "orange"
+   "ACTIVE" "green"})
+
 (defn render-rating
   [bike]
   [:div
@@ -19,7 +23,8 @@
   [bike]
   [:div.model-row
    [:div.bike-model-name (get constants/models (:model-id bike))]
-   [:div.bike-id (:id bike)]])
+   [:div.bike-id (:id bike)]
+   [ant/tag {:color (get status-colors (:status bike))} (:status bike)]])
 
 (defn render-bike-photos
   [bike]
@@ -30,15 +35,20 @@
 
 (defn render-bike-actions
   [bike]
-  [:div
-   [:a {:on-click #(rf/dispatch [:edit-bike (:id bike)])} "Edit"]
-   [ant/divider {:type "vertical"}]
-   [ant/popconfirm {:title "Delete bike?"
-                    :ok-text "Yes"
-                    :cancel-text "No"
-                    :placement "left"
-                    :on-confirm #(rf/dispatch [:delete-bike (:id bike)])}
-    [:a "Delete"]]])
+  (r/with-let [user-role (rf/subscribe [:user-role])]
+    [:div
+     (if (and (= @user-role "moderator") (= (:status bike) "MODERATION"))
+       [:<>
+        [:a {:on-click #(rf/dispatch [:activate-bike (:id bike)])} "Activate"]
+        [ant/divider {:type "vertical"}]])
+     [:a {:on-click #(rf/dispatch [:edit-bike (:id bike)])} "Edit"]
+     [ant/divider {:type "vertical"}]
+     [ant/popconfirm {:title "Delete bike?"
+                      :ok-text "Yes"
+                      :cancel-text "No"
+                      :placement "left"
+                      :on-confirm #(rf/dispatch [:delete-bike (:id bike)])}
+      [:a "Delete"]]]))
 
 (defn render-bikes-table []
   (r/with-let [bikes (rf/subscribe [:bikes])

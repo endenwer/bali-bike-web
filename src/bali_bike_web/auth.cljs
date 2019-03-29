@@ -10,18 +10,27 @@
   (let [auth (.auth firebase)]
     (.signOut auth)))
 
-(defn- update-role []
-  (->
-   (p/promise (.currentUser.getIdTokenResult (.auth firebase)))
-   (p/then #(when (not= (.-claims.role %) "bike-owner")
-              (api/send-graphql {:mutation [:changeRole {:role "bike-owner"}]})))))
+(defn- update-role
+  [user]
+  (if user
+    (->
+     (p/promise (.currentUser.getIdTokenResult (.auth firebase)))
+     (p/then (fn [token ]
+               (let [role (.-claims.role token)]
+                 (when-not (contains? #{"bike-owner" "moderator"} role)
+                   (api/send-graphql {:mutation [:changeRole {:role "bike-owner"}]}))
+                 role))))
+    (p/promise nil)))
 
 (defn listen-user-auth []
   (let [auth (.auth firebase)]
-    (.onAuthStateChanged auth (fn [user]
-                                (let [user-data (if user (js->clj (.toJSON user)) nil)]
-                                  (when user (update-role))
-                                  (rf/dispatch [:auth-state-changed user-data]))))))
+    (.onAuthStateChanged
+     auth
+     (fn [user]
+       (let [user-data (if user (js->clj (.toJSON user)) nil)]
+         (->
+          (update-role user)
+          (p/then #(rf/dispatch [:auth-state-changed user-data %]))))))))
 
 (defn init []
   (firebase/initializeApp

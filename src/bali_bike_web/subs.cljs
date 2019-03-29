@@ -8,6 +8,11 @@
    (:current-user app-db)))
 
 (rf/reg-sub
+ :user-role
+ (fn [app-db _]
+   (:user-role app-db)))
+
+(rf/reg-sub
  :show-form?
  (fn [app-db _]
    (:show-form? app-db)))

@@ -12,21 +12,25 @@
    :dailyPrice :monthlyPrice
    :rating :reviewsCount
    :mileage :manufactureYear
-   :areaIds])
+   :areaIds :status])
 
 ;; events
 
 (defn on-bikes-loaded-event
   [db [_ {:keys [data]}]]
-  (edb/append-collection db :bikes :list (:own-bikes data) {:loading? false}))
+  (let [user-role (:user-role db)
+        query-name (if (= user-role "moderator") :bikes-on-moderation :own-bikes)]
+    (edb/append-collection db :bikes :list (query-name data) {:loading? false})))
 
 (defn load-bikes-event
   [{:keys [db]} [_ _]]
-  (let [bikes (edb/get-collection db :bikes :list)]
+  (let [bikes (edb/get-collection db :bikes :list)
+        user-role (:user-role db)
+        query-name (if (= user-role "moderator") :bikesOnModeration :ownBikes)]
     (when (empty? bikes)
       {:db (edb/insert-meta db :bikes :list {:loading? true})
        :api/send-graphql {:query
-                          [:ownBikes bike-query]
+                          [query-name bike-query]
                           :callback-event :on-bikes-loaded}})))
 
 (defn show-new-bike-form-event
@@ -107,3 +111,8 @@
         filtered-bikes (filter #(not= (:id %)id) bikes)]
     {:db (edb/insert-collection db :bikes :list filtered-bikes)
      :api/send-graphql {:mutation [:deleteBike {:id id} [:id]]}}))
+
+(defn activate-bike-event
+  [{:keys [db]} [_ id]]
+  {:db (edb/update-item-by-id db :bikes id {:status "ACTIVE"})
+   :api/send-graphql {:mutation [:activateBike {:id id} [:id]]}})
