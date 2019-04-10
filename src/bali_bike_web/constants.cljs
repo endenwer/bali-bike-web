@@ -5,7 +5,8 @@
    2 "Honda Vario 125cc"
    3 "Honda Vario 150cc"
    4 "Yamaha NMax"
-   5 "Yamaha XMax"})
+   5 "Yamaha XMax"
+   6 "Yamaha Lexi"})
 
 (def areas
   {1 "Benoa"

@@ -37,6 +37,12 @@
    [ant/select {:placeholder "Select areas"
                 :on-change on-change
                 :value (or area-ids [])
+                :optionFilterProp "children"
+                :filterOption (fn [input option]
+                                (>= (.indexOf
+                                     (.props.children.toLowerCase option)
+                                     (.toLowerCase input))
+                                    0))
                 :mode "multiple"}
     (for [[id title] constants/areas]
       ^{:key id} [ant/select-option {:value id} title])]])
