@@ -71,7 +71,7 @@
   (let [bike-data (or (:create-bike data) (:update-bike data))
         bike (edb/get-item-by-id db :bikes (:id bike-data))
         db-with-bikes (if bike
-                        (edb/update-item-by-id db :bikes (:id bike) bike)
+                        (edb/update-item-by-id db :bikes (:id bike) bike-data)
                         (edb/prepend-collection db :bikes :list [bike-data]))]
     (-> db-with-bikes
         (edb/remove-collection :photos :list)
