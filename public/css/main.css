@@ -74,13 +74,13 @@
     justify-self: center;
     display: grid;
     grid-gap: 10px;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     grid-template-rows: repeat(5, auto);
-    grid-template-areas: "model model model model"
-                         "areas areas areas areas"
-                         "daily-price monthly-price mileage manufacture-year"
-                         "photo-upload photo-upload photo-upload photo-upload"
-                         "form-buttons form-buttons form-buttons form-buttons";
+    grid-template-areas: "model model model model model"
+                         "areas areas areas areas areas"
+                         "daily-price weekly-price monthly-price mileage manufacture-year"
+                         "photo-upload photo-upload photo-upload photo-upload photo-upload"
+                         "form-buttons form-buttons form-buttons form-buttons form-buttons";
 }
 
 .form-container .model-input {

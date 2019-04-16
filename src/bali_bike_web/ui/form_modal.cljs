@@ -161,6 +161,11 @@
                            :is-valid? @(f/is-valid-path? form :daily-price)
                            :on-change #(on-change :daily-price %)
                            :price (:daily-price @form-data)}]
+       [render-bike-price {:title "Weekly price"
+                           :id :weekly-price
+                           :is-valid? @(f/is-valid-path? form :weekly-price)
+                           :on-change #(on-change :weekly-price %)
+                           :price (:weekly-price @form-data)}]
        [render-bike-price {:title "Monthly price"
                            :id :monthly-price
                            :is-valid? @(f/is-valid-path? form :monthly-price)

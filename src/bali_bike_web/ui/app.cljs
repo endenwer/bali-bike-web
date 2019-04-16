@@ -72,6 +72,10 @@
                     :dataIndex "daily-price"
                     :key "daily-daily"
                     :render #(r/as-element [render-price %])}
+                   {:title "Weekly price"
+                    :dataIndex "weekly-price"
+                    :key "weekly-daily"
+                    :render #(r/as-element [render-price %])}
                    {:title "Monthly price"
                     :dataIndex "monthly-price"
                     :key "monthly-price"

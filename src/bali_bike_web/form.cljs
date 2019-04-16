@@ -11,6 +11,7 @@
   (v/validator {:model-id [is-integer]
                 :area-ids [not-blank]
                 :daily-price [is-integer]
+                :weekly-price [is-integer]
                 :monthly-price [is-integer]
                 :mileage [is-integer]
                 :manufacture-year [is-integer]

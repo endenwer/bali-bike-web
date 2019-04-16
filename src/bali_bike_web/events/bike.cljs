@@ -10,6 +10,7 @@
 (def bike-query
   [:id :modelId :photos
    :dailyPrice :monthlyPrice
+   :weeklyPrice
    :rating :reviewsCount
    :mileage :manufactureYear
    :areaIds :status])
@@ -80,12 +81,13 @@
 
 (defn save-bike-event
   [{:keys [db]}
-   [_ {:keys [id model-id manufacture-year mileage daily-price monthly-price area-ids]}]]
+   [_ {:keys [id model-id manufacture-year mileage daily-price monthly-price weekly-price area-ids]}]]
   (let [photos (edb/get-collection db :photos :list)
         photo-urls (into [] (filter some? (map :url photos)))
         shared-params {:photos photo-urls
                        :mileage mileage
                        :dailyPrice daily-price
+                       :weeklyPrice weekly-price
                        :monthlyPrice monthly-price
                        :areaIds area-ids}
         create-params (merge shared-params {:modelId model-id :manufactureYear manufacture-year})
