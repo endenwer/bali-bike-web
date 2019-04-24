@@ -8,6 +8,22 @@
             [forms.core :as f]
             ["react-sortable-hoc" :refer [SortableContainer SortableElement]]))
 
+(defn render-contacts-checkbox
+  [{:keys [on-change value]}]
+  [ant/checkbox {:checked (or value false)
+                 :on-change #(on-change (.-target.checked %))
+                 :className "contacts-checkbox"}
+   "Only contacts"])
+
+(defn render-bike-contacts
+  [{:keys [title id is-valid? on-change value]}]
+  [ant/form-item {:label title
+                  :validate-status (if is-valid? "success" "error")
+                  :help (when-not is-valid? "Can't be blank")
+                  :className (str (name id) "-input")}
+   [ant/input {:value value
+               :on-change #(on-change (.-target.value %))}]])
+
 (defn render-bike-model
   [{:keys [model-id on-change is-valid? disabled?]}]
   [ant/form-item {:label "Bike model"
@@ -171,6 +187,18 @@
                            :is-valid? @(f/is-valid-path? form :monthly-price)
                            :on-change #(on-change :monthly-price %)
                            :price (:monthly-price @form-data)}]
+       [render-bike-contacts {:title "Whatsapp"
+                              :id :whatsapp
+                              :is-valid? @(f/is-valid-path? form :whatsapp)
+                              :on-change #(on-change :whatsapp %)
+                              :value (:whatsapp @form-data)}]
+       [render-bike-contacts {:title "Facebook"
+                              :id :facebook
+                              :is-valid? @(f/is-valid-path? form :facebook)
+                              :on-change #(on-change :facebook %)
+                              :value (:facebook @form-data)}]
+       [render-contacts-checkbox {:on-change #(on-change :only-contacts %)
+                                  :value (:only-contacts @form-data)}]
        [render-bike-mileage {:mileage (:mileage @form-data)
                              :is-valid? @(f/is-valid-path? form :mileage)
                              :on-change #(on-change :mileage %)}]

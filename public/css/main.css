@@ -75,12 +75,28 @@
     display: grid;
     grid-gap: 10px;
     grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(5, auto);
+    grid-template-rows: repeat(6, auto);
     grid-template-areas: "model model model model model"
                          "areas areas areas areas areas"
                          "daily-price weekly-price monthly-price mileage manufacture-year"
+                         "whatsapp whatsapp facebook facebook contacts-checkbox"
                          "photo-upload photo-upload photo-upload photo-upload photo-upload"
                          "form-buttons form-buttons form-buttons form-buttons form-buttons";
+}
+
+.form-container .contacts-checkbox {
+    grid-area: contacts-checkbox;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-container .whatsapp-input {
+    grid-area: whatsapp;
+}
+
+.form-container .facebook-input {
+    grid-area: facebook;
 }
 
 .form-container .model-input {

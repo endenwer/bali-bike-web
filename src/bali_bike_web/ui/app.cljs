@@ -17,13 +17,14 @@
 
 (defn render-price
   [price]
-  [:span (str "Rp" (.toLocaleString price))])
+  [:span (when price (str "Rp" (.toLocaleString price)))])
 
 (defn render-model
   [bike]
   [:div.model-row
    [:div.bike-model-name (get constants/models (:model-id bike))]
    [:div.bike-id (:id bike)]
+   (when (:only-contacts bike) [ant/tag {:color "blue"} "Only contacts"])
    [ant/tag {:color (get status-colors (:status bike))} (:status bike)]])
 
 (defn render-bike-photos
@@ -68,6 +69,14 @@
                                              (for [area-id (get (js->clj bike) "area-ids")]
                                                ^{:key area-id}
                                                [ant/tag (get constants/areas area-id)])]))}
+                   {:title "Contacts"
+                    :dataIndex "contacts"
+                    :key "contacts"
+                    :render (fn [_ bike]
+                              (let [bike-data (js->clj bike)]
+                                (r/as-element [:div
+                                               [:div "Whatsapp: " (get bike-data "whatsapp")]
+                                               [:div "Facebook: " (get bike-data "facebook")]])))}
                    {:title "Daily price"
                     :dataIndex "daily-price"
                     :key "daily-daily"
@@ -83,7 +92,7 @@
                    {:title "Mileage"
                     :dataIndex "mileage"
                     :key "mileage"
-                    :render #(r/as-element [:span (.toLocaleString %)])}
+                    :render #(r/as-element [:span (when % (.toLocaleString %))])}
                    {:title "Manufacture Year"
                     :dataIndex "manufacture-year"
                     :key "manufacture-year"}

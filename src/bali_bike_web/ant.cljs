@@ -14,6 +14,7 @@
             ["antd/lib/tag" :default Tag]
             ["antd/lib/popconfirm" :default Popconfirm]
             ["antd/lib/spin" :default Spin]
+            ["antd/lib/checkbox" :default Checkbox]
             [reagent.core :as r]))
 
 (def menu (r/adapt-react-class Menu))
@@ -35,3 +36,4 @@
 (def tag (r/adapt-react-class Tag))
 (def popconfirm (r/adapt-react-class Popconfirm))
 (def spin (r/adapt-react-class Spin))
+(def checkbox (r/adapt-react-class Checkbox))

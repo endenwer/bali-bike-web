@@ -13,7 +13,9 @@
    :weeklyPrice
    :rating :reviewsCount
    :mileage :manufactureYear
-   :areaIds :status])
+   :areaIds :status
+   :whatsapp :facebook
+   :onlyContacts])
 
 ;; events
 
@@ -81,7 +83,17 @@
 
 (defn save-bike-event
   [{:keys [db]}
-   [_ {:keys [id model-id manufacture-year mileage daily-price monthly-price weekly-price area-ids]}]]
+   [_ {:keys [id
+              model-id
+              manufacture-year
+              mileage
+              daily-price
+              monthly-price
+              weekly-price
+              area-ids
+              whatsapp
+              facebook
+              only-contacts]}]]
   (let [photos (edb/get-collection db :photos :list)
         photo-urls (into [] (filter some? (map :url photos)))
         shared-params {:photos photo-urls
@@ -89,10 +101,15 @@
                        :dailyPrice daily-price
                        :weeklyPrice weekly-price
                        :monthlyPrice monthly-price
-                       :areaIds area-ids}
-        create-params (merge shared-params {:modelId model-id :manufactureYear manufacture-year})
+                       :areaIds area-ids
+                       :whatsapp whatsapp
+                       :facebook facebook
+                       :onlyContacts only-contacts}
+        create-params (into {} (remove (comp nil? second)
+                                       (merge shared-params {:modelId model-id
+                                                             :manufactureYear manufacture-year})))
         create-mutation [:createBike create-params bike-query]
-        update-params (merge shared-params {:id id})
+        update-params (into {} (remove (comp nil? second) (merge shared-params {:id id})))
         update-mutation [:updateBike update-params bike-query]]
     {:db (assoc db :bike-submitting? true)
      :api/send-graphql {:mutation (if id update-mutation create-mutation)
