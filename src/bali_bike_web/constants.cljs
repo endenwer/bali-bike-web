@@ -6,7 +6,13 @@
    3 "Honda Vario 150cc"
    4 "Yamaha NMax"
    5 "Yamaha XMax"
-   6 "Yamaha Lexi"})
+   6 "Yamaha Lexi"
+   7 "Honda Beat FI"
+   8 "Honda Beat Sporty"
+   9 "Honda Vario 110cc"
+   10 "Kawasaki Pulsar"
+   11 "Yamaha Aerox"
+   12 "Kawasaki KLX"})
 
 (def areas
   {1 "Benoa"
