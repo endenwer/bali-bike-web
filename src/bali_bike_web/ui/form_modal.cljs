@@ -192,13 +192,6 @@
                               :is-valid? @(f/is-valid-path? form :whatsapp)
                               :on-change #(on-change :whatsapp %)
                               :value (:whatsapp @form-data)}]
-       [render-bike-contacts {:title "Facebook"
-                              :id :facebook
-                              :is-valid? @(f/is-valid-path? form :facebook)
-                              :on-change #(on-change :facebook %)
-                              :value (:facebook @form-data)}]
-       [render-contacts-checkbox {:on-change #(on-change :only-contacts %)
-                                  :value (:only-contacts @form-data)}]
        [render-bike-mileage {:mileage (:mileage @form-data)
                              :is-valid? @(f/is-valid-path? form :mileage)
                              :on-change #(on-change :mileage %)}]

@@ -24,7 +24,6 @@
   [:div.model-row
    [:div.bike-model-name (get constants/models (:model-id bike))]
    [:div.bike-id (:id bike)]
-   (when (:only-contacts bike) [ant/tag {:color "blue"} "Only contacts"])
    [ant/tag {:color (get status-colors (:status bike))} (:status bike)]])
 
 (defn render-bike-photos
@@ -69,14 +68,12 @@
                                              (for [area-id (get (js->clj bike) "area-ids")]
                                                ^{:key area-id}
                                                [ant/tag (get constants/areas area-id)])]))}
-                   {:title "Contacts"
-                    :dataIndex "contacts"
-                    :key "contacts"
+                   {:title "Whatsapp"
+                    :dataIndex "whatsapp"
+                    :key "whatsapp"
                     :render (fn [_ bike]
                               (let [bike-data (js->clj bike)]
-                                (r/as-element [:div
-                                               [:div "Whatsapp: " (get bike-data "whatsapp")]
-                                               [:div "Facebook: " (get bike-data "facebook")]])))}
+                                (r/as-element [:div (get bike-data "whatsapp")])))}
                    {:title "Daily price"
                     :dataIndex "daily-price"
                     :key "daily-daily"

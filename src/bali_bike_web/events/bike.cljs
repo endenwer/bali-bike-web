@@ -13,8 +13,7 @@
    :weeklyPrice
    :rating :reviewsCount
    :mileage :manufactureYear
-   :areaIds :status
-   :whatsapp :facebook
+   :areaIds :status :whatsapp
    :onlyContacts])
 
 ;; events
@@ -91,9 +90,7 @@
               monthly-price
               weekly-price
               area-ids
-              whatsapp
-              facebook
-              only-contacts]}]]
+              whatsapp]}]]
   (let [photos (edb/get-collection db :photos :list)
         photo-urls (into [] (filter some? (map :url photos)))
         shared-params {:photos photo-urls
@@ -103,8 +100,7 @@
                        :monthlyPrice monthly-price
                        :areaIds area-ids
                        :whatsapp whatsapp
-                       :facebook facebook
-                       :onlyContacts only-contacts}
+                       :onlyContacts true}
         create-params (into {} (remove (comp nil? second)
                                        (merge shared-params {:modelId model-id
                                                              :manufactureYear manufacture-year})))
