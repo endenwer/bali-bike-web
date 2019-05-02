@@ -12,7 +12,12 @@
    9 "Honda Vario 110cc"
    10 "Kawasaki Pulsar"
    11 "Yamaha Aerox"
-   12 "Kawasaki KLX"})
+   12 "Kawasaki KLX"
+   13 "Yamaha R25"
+   14 "Kawasaki Ninja"
+   15 "Honda CBR250"
+   16 "Yamaha MT25"
+   17 "Kawasaki Z250"})
 
 (def areas
   {1 "Benoa"
