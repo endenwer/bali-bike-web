@@ -67,21 +67,11 @@
 
 .form-container {
     margin-top: 50px;
-    margin-bottom: 10px;
+    margin-bottom: 50px;
     grid-area: form;
     min-width: 66%;
     max-width: 90%;
     justify-self: center;
-    display: grid;
-    grid-gap: 10px;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(6, auto);
-    grid-template-areas: "model model model model model"
-                         "areas areas areas areas areas"
-                         "daily-price weekly-price monthly-price mileage manufacture-year"
-                         "whatsapp whatsapp facebook facebook contacts-checkbox"
-                         "photo-upload photo-upload photo-upload photo-upload photo-upload"
-                         "form-buttons form-buttons form-buttons form-buttons form-buttons";
 }
 
 .form-container .contacts-checkbox {
@@ -189,4 +179,69 @@
     justify-content: center;
     align-items: center;
     height: 100%;
+}
+
+
+/* Geosuggest styles */
+
+.geosuggest {
+    grid-area: geosggest;
+    position: relative;
+    text-align: left;
+}
+.geosuggest__suggests--hidden {
+  max-height: 0;
+  overflow: hidden;
+  border-width: 0;
+}
+
+/**
+ * A geosuggest item
+ */
+.geosuggest__item {
+    font-size: 18px;
+    font-size: 1rem;
+    padding: .5em .65em;
+    cursor: pointer;
+}
+
+.geosuggest__suggests {
+    -webkit-box-shadow: 0 2px 8px rgba(0,0,0,.15);
+    box-shadow: 0 2px 8px rgba(0,0,0,.15);
+    border-radius: 4px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-height: 25em;
+    padding: 0;
+    margin-top: -1px;
+    background: #fff;
+    overflow-x: hidden;
+    overflow-y: auto;
+    list-style: none;
+    z-index: 5;
+    -webkit-transition: max-height 0.2s, border 0.2s;
+    transition: max-height 0.2s, border 0.2s;
+}
+
+.geosuggest__suggests--hidden {
+    max-height: 0;
+    overflow: hidden;
+    border-width: 0;
+}
+
+.geosuggest__item:hover, .geosuggest__item:focus {
+    background: #e6f7ff;
+}
+
+.geosuggest__item--active {
+    background: #e6f7ff;
+}
+
+.geosuggest__item--active:hover, .geosuggest__item--active:focus {
+    background: #e6f7ff
+}
+.geosuggest__item__matched-text {
+  font-weight: bold;
 }

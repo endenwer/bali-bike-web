@@ -883,7 +883,7 @@ lodash.clone@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.clone/-/lodash.clone-4.5.0.tgz#195870450f5a13192478df4bc3d23d2dea1907b6"
 
-lodash.debounce@^4.0.0, lodash.debounce@^4.0.8:
+lodash.debounce@^4.0.0, lodash.debounce@^4.0.6, lodash.debounce@^4.0.8:
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
 
@@ -1674,6 +1674,13 @@ react-firebaseui@^3.1.2:
 react-flip-move@^3.0.3:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/react-flip-move/-/react-flip-move-3.0.3.tgz#3065b0b9e622ae73953aba725f8feed8e4643667"
+
+react-geosuggest@^2.12.0:
+  version "2.12.0"
+  resolved "https://registry.yarnpkg.com/react-geosuggest/-/react-geosuggest-2.12.0.tgz#dcbc799708383c89701fcb6d307d9537df239a4d"
+  dependencies:
+    classnames "^2.2.6"
+    lodash.debounce "^4.0.6"
 
 react-highlight.js@^1.0.7:
   version "1.0.7"

@@ -6,7 +6,10 @@
             [clojure.string :as string]
             [bali-bike-web.form :as form]
             [forms.core :as f]
+            ["react-geosuggest" :as Geosuggest]
             ["react-sortable-hoc" :refer [SortableContainer SortableElement]]))
+
+(def geosuggestion (r/adapt-react-class Geosuggest))
 
 (defn render-contacts-checkbox
   [{:keys [on-change value]}]
@@ -18,6 +21,9 @@
 (defn render-bike-contacts
   [{:keys [title id is-valid? on-change value]}]
   [ant/form-item {:label title
+                  :required true
+                  :label-col {:xs {:span 24} :sm {:span 6}}
+                  :wrapper-col {:xs {:span 24} :sm {:span 10}}
                   :validate-status (if is-valid? "success" "error")
                   :help (when-not is-valid? "Can't be blank")
                   :className (str (name id) "-input")}
@@ -27,6 +33,9 @@
 (defn render-bike-model
   [{:keys [model-id on-change is-valid? disabled?]}]
   [ant/form-item {:label "Bike model"
+                  :required true
+                  :label-col {:xs {:span 24} :sm {:span 6}}
+                  :wrapper-col {:xs {:span 24} :sm {:span 10}}
                   :validate-status (if is-valid? "success" "error")
                   :help (when-not is-valid? "Please select bike model")
                   :className "model-input"}
@@ -47,7 +56,10 @@
 (defn render-bike-areas
   [{:keys [area-ids is-valid? on-change]}]
   [ant/form-item {:label "Areas"
+                  :label-col {:xs {:span 24} :sm {:span 6}}
+                  :wrapper-col {:xs {:span 24} :sm {:span 18}}
                   :validate-status (if is-valid? "success" "error")
+                  :extra "Areas where bike can be delivered."
                   :help (when-not is-valid? "Please select at least one area")
                   :className "areas-input"}
    [ant/select {:placeholder "Select areas"
@@ -66,6 +78,8 @@
 (defn render-bike-price
   [{:keys [title price is-valid? on-change id]}]
   [ant/form-item {:label title
+                  :label-col {:xs {:span 24} :sm {:span 6}}
+                  :wrapper-col {:xs {:span 24} :sm {:span 10}}
                   :validate-status (if is-valid? "success" "error")
                   :help (when-not is-valid? "Please input price")
                   :className (str (name id) "-input")}
@@ -78,6 +92,8 @@
 (defn render-bike-manufacture-year
   [{:keys [manufacture-year is-valid? disabled? on-change]}]
   [ant/form-item {:label "Manufacture year"
+                  :label-col {:xs {:span 24} :sm {:span 6}}
+                  :wrapper-col {:xs {:span 24} :sm {:span 10}}
                   :validate-status (if is-valid? "success" "error")
                   :help (when-not is-valid? "Please input manufacture year")
                   :className "manufacture-year-input"}
@@ -88,6 +104,8 @@
 (defn render-bike-mileage
   [{:keys [mileage is-valid? on-change]}]
   [ant/form-item {:label "Mileage"
+                  :label-col {:xs {:span 24} :sm {:span 6}}
+                  :wrapper-col {:xs {:span 24} :sm {:span 10}}
                   :validate-status (if is-valid? "success" "error")
                   :help (when-not is-valid? "Please input mileage")
                   :className "mileage-input"}
@@ -95,6 +113,16 @@
                       :parser #(string/replace (str %) #"(,*)" "")
                       :formatter #(string/replace (str %) #"\B(?=(\d{3})+(?!\d))" ",")
                       :on-change on-change}]])
+
+(defn render-address
+  []
+  [ant/form-item {:label "Address"
+                  :label-col {:xs {:span 24} :sm {:span 6}}
+                  :wrapper-col {:xs {:span 24} :sm {:span 18}}
+                  :className "address-input"}
+   [geosuggestion {:input-class-name "ant-input"
+                   :suggests-class-name "ant-select-dropdown-menu ant-select-dropdown-menu-root"
+                   :suggest-item-class-name "ant-select-dropdown-menu-item"}]])
 
 (defn render-bike-photo-item
   [{:keys [url status progress removePhoto] :as params}]
@@ -116,6 +144,9 @@
 (defn render-photos-container
   [{:keys [photos addPhoto removePhoto isValid?]}]
   [ant/form-item {:label "Photos"
+                  :required true
+                  :label-col {:xs {:span 24} :sm {:span 6}}
+                  :wrapper-col {:xs {:span 24} :sm {:span 18}}
                   :validate-status (if isValid? "success" "error")
                   :help (when-not isValid? "Please upload at least one photo")
                   :className "photos-upload-container"}
@@ -158,20 +189,34 @@
                          (swap! form-data assoc :photos-count (- (:photos-count @(f/data form)) 1))
                          (when-not @(f/is-valid-path? form :photos-count) (f/validate! form true))
                          (rf/dispatch [:remove-photo id]))]
-      [ant/form {:layout "vertical"
-                 :on-submit (fn [e]
+      [ant/form {:on-submit (fn [e]
                               (.preventDefault e)
                               (f/validate! form)
                               (when @(f/is-valid? form)
                                 (rf/dispatch [:save-bike @form-data])))
-                 :className "form-container"}
+                 :class-name "form-container"}
+       [ant/divider {:orientation "left"} "Main information"]
        [render-bike-model {:model-id (:model-id @form-data)
                            :is-valid? @(f/is-valid-path? form :model-id)
                            :disabled? (not (nil? (:id @form-data)))
                            :on-change #(on-change :model-id %)}]
+       [render-bike-contacts {:title "Whatsapp"
+                              :id :whatsapp
+                              :is-valid? @(f/is-valid-path? form :whatsapp)
+                              :on-change #(on-change :whatsapp %)
+                              :value (:whatsapp @form-data)}]
+       [render-bike-photos {:axis "xy"
+                            :add-photo add-photo
+                            :remove-photo remove-photo
+                            :on-sort-end #(rf/dispatch [:move-photo (.-oldIndex %) (.-newIndex %)])
+                            :is-valid? @(f/is-valid-path? form :photos-count)
+                            :photos photos}]
+       [ant/divider {:orientation "left"} "Address"]
+       [render-address]
        [render-bike-areas {:area-ids (:area-ids @form-data)
                            :is-valid? @(f/is-valid-path? form :area-ids)
                            :on-change #(on-change :area-ids (js->clj %))}]
+       [ant/divider {:orientation "left"} "Prices"]
        [render-bike-price {:title "Daily price"
                            :id :daily-price
                            :is-valid? @(f/is-valid-path? form :daily-price)
@@ -187,24 +232,14 @@
                            :is-valid? @(f/is-valid-path? form :monthly-price)
                            :on-change #(on-change :monthly-price %)
                            :price (:monthly-price @form-data)}]
-       [render-bike-contacts {:title "Whatsapp"
-                              :id :whatsapp
-                              :is-valid? @(f/is-valid-path? form :whatsapp)
-                              :on-change #(on-change :whatsapp %)
-                              :value (:whatsapp @form-data)}]
-       [render-bike-mileage {:mileage (:mileage @form-data)
-                             :is-valid? @(f/is-valid-path? form :mileage)
-                             :on-change #(on-change :mileage %)}]
+       [ant/divider {:orientation "left"} "Additional information"]
        [render-bike-manufacture-year {:manufacture-year (:manufacture-year @form-data)
                                       :disabled? (not (nil? (:id @form-data)))
                                       :is-valid? @(f/is-valid-path? form :manufacture-year)
                                       :on-change #(on-change :manufacture-year %)}]
-       [render-bike-photos {:axis "xy"
-                            :add-photo add-photo
-                            :remove-photo remove-photo
-                            :on-sort-end #(rf/dispatch [:move-photo (.-oldIndex %) (.-newIndex %)])
-                            :is-valid? @(f/is-valid-path? form :photos-count)
-                            :photos photos}]
+       [render-bike-mileage {:mileage (:mileage @form-data)
+                             :is-valid? @(f/is-valid-path? form :mileage)
+                             :on-change #(on-change :mileage %)}]
        [render-buttons]])))
 
 (defn main []
