@@ -6,10 +6,12 @@
             [clojure.string :as string]
             [bali-bike-web.form :as form]
             [forms.core :as f]
+            ["@react-google-maps/api" :refer [GoogleMap]]
             ["react-geosuggest" :as Geosuggest]
             ["react-sortable-hoc" :refer [SortableContainer SortableElement]]))
 
 (def geosuggestion (r/adapt-react-class Geosuggest))
+(def google-map (r/adapt-react-class GoogleMap))
 
 (defn render-contacts-checkbox
   [{:keys [on-change value]}]
@@ -122,7 +124,11 @@
                   :className "address-input"}
    [geosuggestion {:input-class-name "ant-input"
                    :suggests-class-name "ant-select-dropdown-menu ant-select-dropdown-menu-root"
-                   :suggest-item-class-name "ant-select-dropdown-menu-item"}]])
+                   :suggest-item-class-name "ant-select-dropdown-menu-item"}]
+   [google-map {:id "google-map"
+                :mapContainerStyle {:width "100%" :height "400px"}
+                :zoom 8
+                :center {:lat -8.745308699651275 :lng 115.16695126891136}}]])
 
 (defn render-bike-photo-item
   [{:keys [url status progress removePhoto] :as params}]

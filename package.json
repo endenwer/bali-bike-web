@@ -9,6 +9,7 @@
     "shadow-cljs": "2.7.32"
   },
   "dependencies": {
+    "@react-google-maps/api": "^1.4.1",
     "antd": "^3.13.2",
     "create-react-class": "^15.6.3",
     "firebase": "^5.8.2",
