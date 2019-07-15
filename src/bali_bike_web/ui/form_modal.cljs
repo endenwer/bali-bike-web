@@ -118,7 +118,15 @@
 
 (defn render-address
   [{:keys [value on-change]}]
-  (r/with-let [map-instance (r/atom nil)]
+  (r/with-let [map-instance (r/atom nil)
+               geocoder (js/window.google.maps.Geocoder.)
+               geocode (fn []
+                         (.geocode
+                          geocoder
+                          #js {:location (.-center @map-instance)}
+                          #(on-change {:address (.-formatted_address (first %))
+                                       :lat (.lat (.-center @map-instance))
+                                       :lng (.lng (.-center @map-instance))})))]
     (let [{:keys [lat lng address]} value]
       [ant/form-item {:label "Address"
                       :label-col {:xs {:span 24} :sm {:span 6}}
@@ -128,6 +136,7 @@
                        :suggests-class-name "ant-select-dropdown-menu ant-select-dropdown-menu-root"
                        :suggest-item-class-name "ant-select-dropdown-menu-item"
                        :contry "ID"
+                       :initial-value address
                        :on-suggest-select #(on-change (if %
                                                         {:address (.-label %)
                                                          :lat (.-location.lat %)
@@ -139,7 +148,7 @@
                     :center {:lat (or lat -8.745308699651275)
                              :lng (or lng 115.16695126891136)}
                     :on-load #(reset! map-instance %)
-                    :on-drag-end #(.log js/console %)}]])))
+                    :on-drag-end geocode}]])))
 
 (defn render-bike-photo-item
   [{:keys [url status progress removePhoto] :as params}]
