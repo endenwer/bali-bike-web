@@ -14,7 +14,8 @@
    :rating :reviewsCount
    :mileage :manufactureYear
    :areaIds :status :whatsapp
-   :onlyContacts])
+   :onlyContacts
+   :address :addressLat :addressLng])
 
 ;; events
 
@@ -90,6 +91,7 @@
               monthly-price
               weekly-price
               area-ids
+              address
               whatsapp]}]]
   (let [photos (edb/get-collection db :photos :list)
         photo-urls (into [] (filter some? (map :url photos)))
@@ -100,6 +102,9 @@
                        :monthlyPrice monthly-price
                        :areaIds area-ids
                        :whatsapp whatsapp
+                       :address (:address address)
+                       :addressLat (str (:lat address))
+                       :addressLng (str (:lng address))
                        :onlyContacts true}
         create-params (into {} (remove (comp nil? second)
                                        (merge shared-params {:modelId model-id
@@ -117,6 +122,9 @@
         photos (map-indexed #(identity {:id %1 :url %2 :status "success"}) (:photos bike))]
     (-> db
         (assoc :form-data bike)
+        (assoc-in [:form-data :address] {:address (:address bike)
+                                         :lat (js/parseFloat (:address-lat bike))
+                                         :lng (js/parseFloat (:address-lng bike))})
         (assoc :show-form? true)
         (edb/insert-collection :photos :list photos))))
 

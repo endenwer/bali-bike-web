@@ -144,7 +144,7 @@
                                                         {}))}]
        [google-map {:id "google-map"
                     :mapContainerStyle {:width "100%" :height "400px"}
-                    :zoom (if address 15 8)
+                    :zoom (if address 16 8)
                     :center {:lat (or lat -8.745308699651275)
                              :lng (or lng 115.16695126891136)}
                     :on-load #(reset! map-instance %)
