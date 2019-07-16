@@ -181,6 +181,48 @@
     height: 100%;
 }
 
+/* Map styles */
+
+.map-placemark {
+    position: absolute;
+    width: 38px;
+    height: 50px;
+    bottom: 50%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    pointer-events: none;
+}
+
+.map-placemark:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -6%;
+    border-radius: 50%;
+    width: 16px;
+    height: 8px;
+    margin: 0 auto;
+    background-color: #004e87;
+    opacity: .3;
+    -webkit-transition-property: width,height,opacity;
+    transition-property: width,height,opacity;
+    will-change: width,height,opacity;
+}
+
+.map-placemark:after {
+    content: '';
+    position: absolute;
+    height: 100%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url(/placemark.svg);
+    -webkit-transition-property: bottom;
+    transition-property: bottom;
+    will-change: bottom;
+}
 
 /* Geosuggest styles */
 

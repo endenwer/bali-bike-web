@@ -135,12 +135,12 @@
        [geosuggestion {:input-class-name "ant-input"
                        :suggests-class-name "ant-select-dropdown-menu ant-select-dropdown-menu-root"
                        :suggest-item-class-name "ant-select-dropdown-menu-item"
-                       :contry "ID"
+                       :country "ID"
                        :initial-value address
                        :on-suggest-select #(on-change (if %
                                                         {:address (.-label %)
                                                          :lat (.-location.lat %)
-                                                         :lgn (.-location.lng %)}
+                                                         :lng (.-location.lng %)}
                                                         {}))}]
        [google-map {:id "google-map"
                     :mapContainerStyle {:width "100%" :height "400px"}
@@ -148,7 +148,8 @@
                     :center {:lat (or lat -8.745308699651275)
                              :lng (or lng 115.16695126891136)}
                     :on-load #(reset! map-instance %)
-                    :on-drag-end geocode}]])))
+                    :on-drag-end geocode}
+        [:div.map-placemark]]])))
 
 (defn render-bike-photo-item
   [{:keys [url status progress removePhoto] :as params}]
